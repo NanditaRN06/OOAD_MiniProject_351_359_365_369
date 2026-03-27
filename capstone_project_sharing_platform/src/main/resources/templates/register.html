@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    background: linear-gradient(120deg, #11998e, #38ef7d);
+}
+
+/* LEFT SIDE */
+.left {
+    flex: 1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+}
+
+.left h1 {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.left p {
+    font-size: 22px;
+    opacity: 0.85;
+}
+
+/* RIGHT SIDE */
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* GLASS CARD */
+.container {
+    width: 380px;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    color: white;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #00c9ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0072ff;
+}
+
+/* LINK */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #eee;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="left">
+    <h1>Join the Platform</h1>
+    <p>Create, upload, and discover innovative academic projects.</p>
+</div>
+
+<div class="right">
+    <div class="container">
+        <h2>Register</h2>
+
+        <form action="/auth/register" method="post">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <select name="role">
+                <option value="STUDENT">Student</option>
+                <option value="FACULTY">Faculty</option>
+            </select>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <a href="/auth/login">Already have an account?</a>
+    </div>
+</div>
+
+</body>
+</html>
