@@ -24,29 +24,39 @@ public class AuthController {
         return "login";
     }
 
-   @PostMapping("/register")
-public String register(@RequestParam String name,
-                       @RequestParam String email,
-                       @RequestParam String password,
-                       @RequestParam String role) {
+    @PostMapping("/register")
+    public String register(@RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String role) {
 
-    RegisterRequest request = new RegisterRequest();
-    request.setName(name);
-    request.setEmail(email);
-    request.setPassword(password);
-    request.setRole(role);
+        RegisterRequest request = new RegisterRequest();
+        request.setName(name);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setRole(role);
 
-    userService.registerUser(request);
+        userService.registerUser(request);
 
-    return "redirect:/auth/login";
-}
+        return "redirect:/auth/login";
+    }
 
     @PostMapping("/login")
     public String login(@RequestParam String email,
-                        @RequestParam String password) {
+            @RequestParam String password,
+            org.springframework.ui.Model model) {
 
-        userService.loginUser(email, password);
+        com.ooadproject.capstone_project_sharing_platform.entity.User user = userService.loginUser(email, password);
+
+        if (user.getRole() == com.ooadproject.capstone_project_sharing_platform.entity.UserRole.FACULTY) {
+            return "redirect:/faculty/dashboard?email=" + email;
+        }
 
         return "success";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/auth/login";
     }
 }
