@@ -1,10 +1,12 @@
 package com.ooadproject.capstone_project_sharing_platform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import com.ooadproject.capstone_project_sharing_platform.dto.request.RegisterRequest;
+import org.springframework.web.bind.annotation.*;
 
+import com.ooadproject.capstone_project_sharing_platform.dto.request.RegisterRequest;
+import com.ooadproject.capstone_project_sharing_platform.entity.User;
+import com.ooadproject.capstone_project_sharing_platform.entity.UserRole;
 import com.ooadproject.capstone_project_sharing_platform.service.UserService;
 
 @Controller
@@ -26,9 +28,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam String role) {
+                           @RequestParam String email,
+                           @RequestParam String password,
+                           @RequestParam String role) {
 
         RegisterRequest request = new RegisterRequest();
         request.setName(name);
@@ -41,18 +43,32 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
+    /*
+     * GRASP Principle: Controller
+     * This method handles login request and delegates authentication logic
+     * to UserService (Information Expert).
+     * It also handles navigation flow based on user role.
+     */
     @PostMapping("/login")
     public String login(@RequestParam String email,
-            @RequestParam String password,
-            org.springframework.ui.Model model) {
+                        @RequestParam String password,
+                        org.springframework.ui.Model model) {
 
-        com.ooadproject.capstone_project_sharing_platform.entity.User user = userService.loginUser(email, password);
+        try {
+            User user = userService.loginUser(email, password);
 
-        if (user.getRole() == com.ooadproject.capstone_project_sharing_platform.entity.UserRole.FACULTY) {
-            return "redirect:/faculty/dashboard?email=" + email;
+            if (user.getRole() == UserRole.FACULTY) {
+                return "redirect:/faculty/dashboard?email=" + email;
+            } else if (user.getRole() == UserRole.STUDENT) {
+                return "redirect:/student/dashboard?email=" + email;
+            }
+
+            return "success";
+
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "login";  // ✅ stays on login page
         }
-
-        return "success";
     }
 
     @GetMapping("/logout")
