@@ -29,3 +29,12 @@ The mini project now includes a consistent Thymeleaf-based UI layer under `src/m
 
 - The new screens follow one shared visual theme so the app stays consistent across the current branch.
 - The existing controllers already point to the updated templates, so the UI can be pulled and extended by the rest of the team without changing the navigation contract.
+
+## Shared UI Components
+
+Reusable UI components are now maintained directly inside this workspace under:
+
+- `capstone_project_sharing_platform/src/main/resources/templates/fragments/components.html`
+- `capstone_project_sharing_platform/src/main/resources/static/css/ui-components.css`
+
+All existing templates import these shared assets from the same directory tree, so UI updates can now be done centrally without duplicating inline CSS or scripts.

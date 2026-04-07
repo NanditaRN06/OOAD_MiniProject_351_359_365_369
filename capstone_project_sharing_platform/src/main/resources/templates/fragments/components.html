@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <th:block th:fragment="head(pageTitle)">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title th:text="${pageTitle}">Capstone Project Sharing Platform</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/ui-components.css}">
+    </th:block>
+
+    <header th:fragment="topbar(brandText, link1Href, link1Text, link2Href, link2Text)" class="topbar">
+        <div class="brand" th:text="${brandText}">Project Sharing Platform</div>
+        <nav class="topbar-links">
+            <a th:href="${link1Href}" th:text="${link1Text}">First Link</a>
+            <a th:href="${link2Href}" th:text="${link2Text}">Second Link</a>
+        </nav>
+    </header>
+
+    <th:block th:fragment="toggleEditScript">
+        <script>
+            function toggleEdit() {
+                var form = document.getElementById("editForm");
+                if (!form) {
+                    return;
+                }
+                form.style.display = (form.style.display === "none" || form.style.display === "")
+                    ? "block"
+                    : "none";
+            }
+        </script>
+    </th:block>
+</body>
+</html>
