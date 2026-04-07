@@ -1,133 +1,373 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Capstone Project Sharing Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+    <style>
+        :root {
+            --bg-1: #06111f;
+            --bg-2: #0c1d35;
+            --panel: rgba(9, 18, 32, 0.78);
+            --panel-strong: rgba(15, 28, 49, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #edf4ff;
+            --muted: #a7b7d3;
+            --accent: #73f2c1;
+            --accent-2: #66a6ff;
+            --warning: #ff9f6e;
+        }
 
-body {
-    height: 100vh;
-    display: flex;
-    background: linear-gradient(120deg, #1e3c72, #5c76a2);
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* LEFT SIDE (branding) */
-.left {
-    flex: 1;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 80px;
-}
+        body {
+            min-height: 100vh;
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(102, 166, 255, 0.22), transparent 30%),
+                radial-gradient(circle at 85% 10%, rgba(115, 242, 193, 0.18), transparent 22%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
+            overflow-x: hidden;
+        }
 
-.left h1 {
-    font-size: 70px;
-    margin-bottom: 15px;
-}
+        .shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+        }
 
-.left p {
-    font-size: 22px;
-    opacity: 0.8;
-}
+        .brand-panel,
+        .form-panel {
+            position: relative;
+            padding: 48px;
+        }
 
-/* RIGHT SIDE (form) */
-.right {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .brand-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 32px;
+        }
 
-/* GLASS CARD */
-.container {
-    width: 350px;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    color: white;
-}
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
 
-.container h2 {
-    text-align: center;
-    margin-bottom: 25px;
-}
+        .brand-title {
+            max-width: 620px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+        }
 
-/* INPUTS */
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-}
+        .brand-copy {
+            max-width: 600px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--muted);
+        }
 
-/* BUTTON */
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #00c6ff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .feature-grid,
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
 
-button:hover {
-    background: #0072ff;
-}
+        .feature-card,
+        .stat-card,
+        .auth-card {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--panel);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        }
 
-/* LINK */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #ddd;
-    text-decoration: none;
-}
+        .feature-card,
+        .stat-card {
+            padding: 18px;
+        }
 
-a:hover {
-    color: white;
-}
-</style>
+        .feature-card strong,
+        .stat-card strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-card p,
+        .stat-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.96rem;
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 124px;
+            background: linear-gradient(180deg, rgba(115, 242, 193, 0.08), rgba(255, 255, 255, 0.03));
+        }
+
+        .stat-card span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.06)),
+                linear-gradient(160deg, rgba(102, 166, 255, 0.15), rgba(115, 242, 193, 0.08));
+        }
+
+        .auth-card {
+            width: min(100%, 440px);
+            padding: 34px;
+            background: var(--panel-strong);
+        }
+
+        .auth-card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 22px 0;
+        }
+
+        .tag {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #8397b7;
+        }
+
+        input:focus {
+            border-color: rgba(115, 242, 193, 0.55);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .primary-button,
+        .ghost-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 14px 18px;
+            border: 0;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            color: #06111f;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 16px 30px rgba(102, 166, 255, 0.24);
+        }
+
+        .primary-button:hover,
+        .ghost-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .error-banner {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 159, 110, 0.12);
+            border: 1px solid rgba(255, 159, 110, 0.22);
+            color: #ffd2be;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            color: var(--muted);
+            flex-wrap: wrap;
+        }
+
+        .ghost-link {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        @media (max-width: 980px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-panel,
+            .form-panel {
+                padding: 28px 18px;
+            }
+
+            .brand-title {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .feature-grid,
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                padding: 24px 18px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="shell">
+        <section class="brand-panel">
+            <div>
+                <div class="eyebrow">Capstone Project Sharing Platform</div>
+                <h1 class="brand-title">One workspace for project sharing, feedback, and academic review.</h1>
+                <p class="brand-copy">
+                    Students publish ideas, faculty review submissions, and the same branch now carries a cleaner,
+                    role-aware interface for the next round of collaboration.
+                </p>
+            </div>
 
-<div class="left">
-    <h1>Project Sharing Platform</h1>
-    <p>Manage, share and explore academic projects seamlessly.</p>
-</div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <strong>Role-based entry</strong>
+                    <p>Separate student and faculty journeys with the same visual language.</p>
+                </div>
+                <div class="feature-card">
+                    <strong>Fast feedback flow</strong>
+                    <p>Move from login to dashboards and project views without extra navigation noise.</p>
+                </div>
+            </div>
 
-<div class="right">
-    <div class="container">
-        <h2>Login</h2>
-        <p th:if="${error}" style="color: red; text-align:center;">
-    <span th:text="${error}"></span>
-</p>
-        <form action="/auth/login" method="post">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span>2</span>
+                    <p>Primary user roles already supported in the app UI.</p>
+                </div>
+                <div class="stat-card">
+                    <span>1</span>
+                    <p>Shared design system across login, register, and dashboards.</p>
+                </div>
+            </div>
+        </section>
 
-            <button type="submit">Login</button>
-        </form>
+        <section class="form-panel">
+            <div class="auth-card">
+                <h2>Welcome back</h2>
+                <p>Sign in to continue to your dashboard and open the shared project workspace.</p>
 
-        <a href="/auth/register">Create an account</a>
+                <div class="tag-row">
+                    <span class="tag">Students</span>
+                    <span class="tag">Faculty</span>
+                    <span class="tag">Project Review</span>
+                </div>
+
+                <form action="/auth/login" method="post">
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="primary-button">Login</button>
+                </form>
+
+                <p th:if="${error}" class="error-banner" th:text="${error}">Invalid credentials</p>
+
+                <div class="footer-row">
+                    <span>New here? Create an account first.</span>
+                    <a class="ghost-link" href="/auth/register">Register</a>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
-
 </body>
 </html>

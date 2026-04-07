@@ -1,222 +1,431 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <title>Faculty Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard | Capstone Project Sharing Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg-1: #06111f;
+            --bg-2: #12243d;
+            --panel: rgba(11, 20, 36, 0.84);
+            --panel-soft: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #edf4ff;
+            --muted: #a7b7d3;
+            --accent: #ffb36b;
+            --accent-2: #6a9cff;
+            --accent-3: #72ffd1;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 179, 107, 0.18), transparent 26%),
+                radial-gradient(circle at 82% 10%, rgba(114, 255, 209, 0.14), transparent 24%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
         }
 
-        .header {
+        .page-shell {
+            min-height: 100vh;
+            padding: 28px;
+        }
+
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 80px;
+            gap: 16px;
+            padding: 4px 4px 24px;
         }
 
-        .header h1 {
-            font-size: 30px;
+        .brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem;
+            letter-spacing: -0.04em;
         }
 
-        /* DASHBOARD LAYOUT */
-        .dashboard-container {
-            flex: 1;
+        .topbar-links {
             display: flex;
-            flex-direction: column;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .topbar-links a,
+        .button,
+        .button-secondary {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            padding: 12px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
         }
 
-        /* GLASS CARD */
-        .glass-card {
-            width: 800px;
-            padding: 40px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
+        .topbar-links a,
+        .button-secondary {
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
         }
 
-        .profile-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .info-group h2 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .info-group p {
-            font-size: 18px;
-            opacity: 0.8;
-        }
-
-        .details-group {
-            text-align: right;
-        }
-
-        .details-group p {
-            margin: 5px 0;
-            font-weight: 500;
-        }
-
-        /* BUTTONS */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 12px 25px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
+        .button {
+            border: 0;
             cursor: pointer;
-            transition: 0.3s;
-            font-size: 16px;
+            font: inherit;
         }
 
-        .btn-primary {
-            background: #00c6ff;
-            color: white;
+        .button-primary {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+            color: #06111f;
+            font-weight: 800;
+            box-shadow: 0 16px 30px rgba(106, 156, 255, 0.22);
         }
 
-        .btn-primary:hover {
-            background: #0072ff;
+        .button-secondary:hover,
+        .topbar-links a:hover,
+        .button:hover {
+            transform: translateY(-1px);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr);
+            gap: 18px;
+            margin-bottom: 18px;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--panel);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
         }
 
-        /* EDIT FORM */
+        .hero,
+        .stats,
+        .quick-card,
+        .form-card,
+        .side-card {
+            padding: 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 14px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 179, 107, 0.12);
+            color: var(--accent);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 4.7vw, 4rem);
+            line-height: 0.98;
+            margin-bottom: 12px;
+        }
+
+        .hero p,
+        .side-card p,
+        .quick-card p,
+        .form-card p,
+        .stat p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .profile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            font-size: 0.92rem;
+        }
+
+        .stats {
+            display: grid;
+            gap: 14px;
+        }
+
+        .stat {
+            padding: 18px;
+            border-radius: 18px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .quick-card {
+            grid-column: span 4;
+        }
+
+        .form-card {
+            grid-column: span 8;
+        }
+
+        .side-card {
+            grid-column: span 4;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
         #editForm {
             display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .field {
+            display: grid;
+            gap: 8px;
+            margin-top: 14px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            opacity: 0.8;
+        label {
+            color: var(--muted);
+            font-size: 0.92rem;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
             outline: none;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            border-color: rgba(114, 255, 209, 0.55);
+            transform: translateY(-1px);
         }
 
         .success-msg {
-            color: #72ffd1;
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(114, 255, 209, 0.12);
+            border: 1px solid rgba(114, 255, 209, 0.22);
+            color: #d7fff2;
+        }
+
+        .micro-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .micro-item {
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .micro-item strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 1100px) {
+            .hero-grid,
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-card,
+            .form-card,
+            .side-card {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page-shell {
+                padding: 18px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
     </style>
 
     <script>
         function toggleEdit() {
             var form = document.getElementById("editForm");
-            if (form.style.display === "none" || form.style.display === "") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
+            form.style.display = (form.style.display === "none" || form.style.display === "")
+                ? "block"
+                : "none";
         }
     </script>
 </head>
-
 <body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand">Project Sharing Platform</div>
+            <nav class="topbar-links">
+                <a th:href="@{/faculty/view-projects}">View Projects</a>
+                <a href="/auth/logout">Logout</a>
+            </nav>
+        </header>
 
-    <div class="header">
-        <h1>Project Platform</h1>
-        <a href="/auth/logout" style="color: white; text-decoration: none;">Logout</a>
-    </div>
+        <section class="hero-grid">
+            <div class="panel hero">
+                <div class="eyebrow">Faculty workspace</div>
+                <h1 th:text="${faculty.name}">Faculty Name</h1>
+                <p>
+                    Review project work, keep your profile up to date, and stay aligned with the shared template set
+                    that now powers the branch.
+                </p>
 
-    <div class="dashboard-container">
-        <div class="glass-card">
-            <div class="profile-section">
-                <div class="info-group">
-                    <h2 th:text="${faculty.name}">John Doe</h2>
-                    <p th:text="${faculty.email}">john@university.edu</p>
-                    <p><span class="badge"
-                            style="background: #ff7e5f; padding: 2px 10px; border-radius: 15px; font-size: 12px;"
-                            th:text="${faculty.role}">FACULTY</span></p>
+                <div class="profile-meta">
+                    <span class="pill" th:text="${faculty.email}">john@university.edu</span>
+                    <span class="pill" th:text="${faculty.role}">FACULTY</span>
+                    <span class="pill">Review mode ready</span>
                 </div>
-                <div class="details-group">
-                    <p th:text="${faculty.designation ?: '[No Designation]'}">Professor</p>
-                    <p th:text="${faculty.department ?: '[No Department]'}">Computer Science</p>
+            </div>
+
+            <div class="panel stats">
+                <div class="stat">
+                    <strong>Designation</strong>
+                    <p th:text="${faculty.designation != null ? faculty.designation : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Department</strong>
+                    <p th:text="${faculty.department != null ? faculty.department : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Primary next step</strong>
+                    <p>Open the shared project list and review the active submissions.</p>
                 </div>
             </div>
+        </section>
 
-            <div class="action-buttons">
-                <button class="btn-primary" onclick="alert('Viewing all projects...')">View Projects</button>
-                <button class="btn-primary" onclick="alert('Comment functionality logic would go here.')">Comment on
-                    Project</button>
-                <button class="btn-secondary" onclick="toggleEdit()">Edit Details</button>
-            </div>
+        <section class="content-grid">
+            <article class="panel quick-card">
+                <h2>Quick actions</h2>
+                <p>Stay in control of the review workflow from one place.</p>
 
-            <div id="editForm">
-                <h3>Update Profile Details</h3>
-                <form action="/faculty/update" method="post">
-                    <input type="hidden" name="email" th:value="${faculty.email}">
-                    <div class="form-group">
-                        <label>Designation</label>
-                        <input type="text" name="designation" th:value="${faculty.designation}"
-                            placeholder="ex: Professor, Lecturer" required>
+                <div class="card-actions">
+                    <a class="button button-primary" th:href="@{/faculty/view-projects}">View projects</a>
+                    <button class="button button-secondary" type="button" onclick="toggleEdit()">Edit details</button>
+                </div>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Project review</strong>
+                        <p>Use the shared projects page to inspect titles, domains, and technologies.</p>
                     </div>
-                    <div class="form-group">
-                        <label>Department</label>
-                        <input type="text" name="department" th:value="${faculty.department}"
-                            placeholder="ex: Computer Science" required>
+                    <div class="micro-item">
+                        <strong>Feedback readiness</strong>
+                        <p>The interface is prepared for comment and evaluation features to be layered in next.</p>
                     </div>
-                    <button type="submit" class="btn-primary">Save Changes</button>
-                </form>
-            </div>
+                </div>
+            </article>
 
-            <p th:if="${param.success}" class="success-msg">Details updated successfully!</p>
-        </div>
+            <article class="panel form-card">
+                <h2>Update profile</h2>
+                <p>Keep your designation and department current for student-facing views.</p>
+
+                <div id="editForm">
+                    <form action="/faculty/update" method="post">
+                        <input type="hidden" name="email" th:value="${faculty.email}">
+
+                        <div class="field">
+                            <label for="designation">Designation</label>
+                            <input id="designation" type="text" name="designation" th:value="${faculty.designation}"
+                                placeholder="Professor, Lecturer, Associate Professor" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="department">Department</label>
+                            <input id="department" type="text" name="department" th:value="${faculty.department}"
+                                placeholder="Computer Science" required>
+                        </div>
+
+                        <div class="card-actions">
+                            <button type="submit" class="button button-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${param.success}" class="success-msg">Details updated successfully!</div>
+            </article>
+
+            <aside class="panel side-card">
+                <h2>Review workspace</h2>
+                <p>The faculty view now mirrors the student UI so your team can keep the same language across screens.</p>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Shared navigation</strong>
+                        <p>Project pages and logout are available directly from the header.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Consistent branch</strong>
+                        <p>This redesign stays on the existing branch so your teammates can pull it and continue the work.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
     </div>
-
 </body>
-
 </html>

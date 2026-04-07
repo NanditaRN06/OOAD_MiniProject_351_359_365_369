@@ -1,210 +1,429 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | Capstone Project Sharing Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg-1: #06111f;
+            --bg-2: #11253f;
+            --panel: rgba(11, 20, 36, 0.84);
+            --panel-soft: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #edf4ff;
+            --muted: #a7b7d3;
+            --accent: #72ffd1;
+            --accent-2: #6a9cff;
+            --accent-3: #ff9f6e;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 20px;
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(106, 156, 255, 0.2), transparent 28%),
+                radial-gradient(circle at 80% 10%, rgba(114, 255, 209, 0.14), transparent 24%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
         }
 
-        .header {
+        .page-shell {
+            min-height: 100vh;
+            padding: 28px;
+        }
+
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 80px;
+            gap: 16px;
+            padding: 4px 4px 24px;
         }
 
-        .header h1 {
-            font-size: 30px;
+        .brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem;
+            letter-spacing: -0.04em;
         }
 
-        .dashboard-container {
-            flex: 1;
+        .topbar-links {
             display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .topbar-links a,
+        .button,
+        .button-secondary {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            padding: 12px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
         }
 
-        .glass-card {
-            width: 800px;
-            padding: 40px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        .topbar-links a,
+        .button-secondary {
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
         }
 
-        .profile-section {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .info-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .info-group h2 {
-            font-size: 28px;
-        }
-
-        .info-group p {
-            font-size: 18px;
-            opacity: 0.8;
-        }
-
-        /* ✅ FIXED ROLE BADGE */
-        .role-badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 6px 14px;
-            background: #ff7e5f;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            width: fit-content;
-        }
-
-        .details-group {
-            text-align: right;
-        }
-
-        .details-group p {
-            margin: 5px 0;
-        }
-
-        .action-buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-        }
-
-        button {
-            padding: 12px 25px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
+        .button {
+            border: 0;
             cursor: pointer;
+            font: inherit;
         }
 
-        .btn-primary {
-            background: #00c6ff;
-            color: white;
+        .button-primary {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            color: #06111f;
+            font-weight: 800;
+            box-shadow: 0 16px 30px rgba(106, 156, 255, 0.22);
         }
 
-        .btn-primary:hover {
-            background: #0072ff;
+        .button-secondary:hover,
+        .topbar-links a:hover,
+        .button:hover {
+            transform: translateY(-1px);
         }
 
-        .btn-secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr);
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--panel);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        }
+
+        .hero,
+        .stats,
+        .quick-card,
+        .form-card,
+        .side-card {
+            padding: 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 14px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(114, 255, 209, 0.1);
+            color: var(--accent);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 4.7vw, 4rem);
+            line-height: 0.98;
+            margin-bottom: 12px;
+        }
+
+        .hero p,
+        .side-card p,
+        .quick-card p,
+        .form-card p,
+        .stat p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .profile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            font-size: 0.92rem;
+        }
+
+        .stats {
+            display: grid;
+            gap: 14px;
+        }
+
+        .stat {
+            padding: 18px;
+            border-radius: 18px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .quick-card {
+            grid-column: span 4;
+        }
+
+        .form-card {
+            grid-column: span 8;
+        }
+
+        .side-card {
+            grid-column: span 4;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
         }
 
         #editForm {
             display: none;
-            margin-top: 20px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        label {
+            color: var(--muted);
+            font-size: 0.92rem;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 8px;
-            border: none;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            border-color: rgba(114, 255, 209, 0.55);
+            transform: translateY(-1px);
         }
 
         .success-msg {
-            color: #72ffd1;
-            margin-top: 10px;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(114, 255, 209, 0.12);
+            border: 1px solid rgba(114, 255, 209, 0.22);
+            color: #d7fff2;
+        }
+
+        .micro-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .micro-item {
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .micro-item strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 1100px) {
+            .hero-grid,
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-card,
+            .form-card,
+            .side-card {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page-shell {
+                padding: 18px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
     </style>
 
     <script>
         function toggleEdit() {
             var form = document.getElementById("editForm");
-            form.style.display = (form.style.display === "none" || form.style.display === "") 
-                ? "block" 
+            form.style.display = (form.style.display === "none" || form.style.display === "")
+                ? "block"
                 : "none";
         }
     </script>
 </head>
-
 <body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand">Project Sharing Platform</div>
+            <nav class="topbar-links">
+                <a th:href="@{/student/view-projects}">View Projects</a>
+                <a href="/auth/logout">Logout</a>
+            </nav>
+        </header>
 
-<div class="header">
-    <h1>Project Platform</h1>
-    <a href="/auth/logout" style="color:white;">Logout</a>
-</div>
+        <section class="hero-grid">
+            <div class="panel hero">
+                <div class="eyebrow">Student workspace</div>
+                <h1 th:text="${student.name}">Student Name</h1>
+                <p>
+                    Your dashboard keeps the profile details, project discovery, and future feedback steps in one
+                    place so the rest of the team can work from the same branch.
+                </p>
 
-<div class="dashboard-container">
-    <div class="glass-card">
-
-        <div class="profile-section">
-            <div class="info-group">
-                <h2 th:text="${student.name}">Student Name</h2>
-                <p th:text="${student.email}">email@example.com</p>
-
-                <!-- ✅ FIXED BADGE -->
-                <p class="role-badge" th:text="${student.role}">STUDENT</p>
+                <div class="profile-meta">
+                    <span class="pill" th:text="${student.email}">email@example.com</span>
+                    <span class="pill" th:text="${student.role}">STUDENT</span>
+                    <span class="pill">Profile sync enabled</span>
+                </div>
             </div>
 
-            <div class="details-group">
-                <p th:text="${student.usn ?: '[No USN]'}">USN123</p>
-                <p th:text="${student.branch ?: '[No Branch]'}">CSE</p>
+            <div class="panel stats">
+                <div class="stat">
+                    <strong>USN</strong>
+                    <p th:text="${student.usn != null ? student.usn : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Branch</strong>
+                    <p th:text="${student.branch != null ? student.branch : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Primary next step</strong>
+                    <p>Open the project board and review the shared submissions list.</p>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="action-buttons">
-            <button class="btn-primary" onclick="alert('Viewing projects...')">
-                View Projects
-            </button>
-            <button class="btn-secondary" onclick="toggleEdit()">
-                Edit Profile
-            </button>
-        </div>
+        <section class="content-grid">
+            <article class="panel quick-card">
+                <h2>Quick actions</h2>
+                <p>Move to the next part of the workflow without leaving the dashboard.</p>
 
-        <div id="editForm">
-            <h3>Update Profile</h3>
-            <form action="/student/update" method="post">
-                <input type="hidden" name="email" th:value="${student.email}">
+                <div class="card-actions">
+                    <a class="button button-primary" th:href="@{/student/view-projects}">View projects</a>
+                    <button class="button button-secondary" type="button" onclick="toggleEdit()">Edit profile</button>
+                </div>
 
-                <input type="text" name="usn" placeholder="Enter USN" 
-                       th:value="${student.usn}" required>
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Project discovery</strong>
+                        <p>Use the shared project page to scan ideas, domains, and technologies.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Profile maintenance</strong>
+                        <p>Keep USN and branch details updated so the faculty side sees the correct record.</p>
+                    </div>
+                </div>
+            </article>
 
-                <input type="text" name="branch" placeholder="Enter Branch" 
-                       th:value="${student.branch}" required>
+            <article class="panel form-card">
+                <h2>Update profile</h2>
+                <p>Keep your academic details current for the rest of the shared workflow.</p>
 
-                <button type="submit" class="btn-primary">Save</button>
-            </form>
-        </div>
+                <div id="editForm">
+                    <form action="/student/update" method="post">
+                        <input type="hidden" name="email" th:value="${student.email}">
 
-        <p th:if="${param.success}" class="success-msg">
-            Profile updated successfully!
-        </p>
+                        <div class="field">
+                            <label for="usn">USN</label>
+                            <input id="usn" type="text" name="usn" placeholder="Enter USN" th:value="${student.usn}" required>
+                        </div>
 
+                        <div class="field">
+                            <label for="branch">Branch</label>
+                            <input id="branch" type="text" name="branch" placeholder="Enter branch" th:value="${student.branch}" required>
+                        </div>
+
+                        <div class="card-actions">
+                            <button type="submit" class="button button-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${param.success}" class="success-msg">Profile updated successfully!</div>
+            </article>
+
+            <aside class="panel side-card">
+                <h2>What is next</h2>
+                <p>The dashboard is now aligned with the current branch and the shared templates folder.</p>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Shared UI</strong>
+                        <p>Login, register, dashboards, and projects page now use the same visual direction.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Consistent flow</strong>
+                        <p>Students can move straight into projects without jumping between disconnected screens.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
     </div>
-</div>
-
 </body>
 </html>

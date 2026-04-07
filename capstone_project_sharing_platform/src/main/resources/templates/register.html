@@ -1,137 +1,354 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Capstone Project Sharing Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+    <style>
+        :root {
+            --bg-1: #081018;
+            --bg-2: #10263f;
+            --panel: rgba(9, 18, 32, 0.8);
+            --panel-strong: rgba(14, 28, 49, 0.92);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #edf4ff;
+            --muted: #a7b7d3;
+            --accent: #72ffd1;
+            --accent-2: #6a9cff;
+            --accent-3: #ffb36b;
+        }
 
-body {
-    height: 100vh;
-    display: flex;
-    background: linear-gradient(120deg, #11998e, #38ef7d);
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* LEFT SIDE */
-.left {
-    flex: 1;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 80px;
-}
+        body {
+            min-height: 100vh;
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 15% 10%, rgba(106, 156, 255, 0.2), transparent 24%),
+                radial-gradient(circle at 90% 15%, rgba(114, 255, 209, 0.16), transparent 22%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
+        }
 
-.left h1 {
-    font-size: 70px;
-    margin-bottom: 15px;
-}
+        .shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+        }
 
-.left p {
-    font-size: 22px;
-    opacity: 0.85;
-}
+        .brand-panel,
+        .form-panel {
+            padding: 48px;
+        }
 
-/* RIGHT SIDE */
-.right {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .brand-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 32px;
+        }
 
-/* GLASS CARD */
-.container {
-    width: 380px;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    color: white;
-}
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--muted);
+            font-size: 0.88rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
 
-.container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .brand-title {
+            max-width: 620px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.9rem, 6.5vw, 5rem);
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+        }
 
-/* INPUTS */
-input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-}
+        .brand-copy {
+            max-width: 620px;
+            color: var(--muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
 
-/* BUTTON */
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #00c9ff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .feature-stack {
+            display: grid;
+            gap: 16px;
+        }
 
-button:hover {
-    background: #0072ff;
-}
+        .feature-card,
+        .auth-card {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--panel);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        }
 
-/* LINK */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #eee;
-    text-decoration: none;
-}
+        .feature-card {
+            padding: 18px;
+        }
 
-a:hover {
-    color: white;
-}
-</style>
+        .feature-card strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .feature-tile {
+            padding: 18px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-tile span {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+
+        .feature-tile p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.96rem;
+        }
+
+        .form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.06)),
+                linear-gradient(160deg, rgba(106, 156, 255, 0.14), rgba(114, 255, 209, 0.08));
+        }
+
+        .auth-card {
+            width: min(100%, 460px);
+            padding: 34px;
+            background: var(--panel-strong);
+        }
+
+        .auth-card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #8397b7;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(114, 255, 209, 0.55);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-1px);
+        }
+
+        select option {
+            color: #0b1727;
+        }
+
+        .primary-button,
+        .ghost-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 14px 18px;
+            border: 0;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            color: #06111f;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 16px 30px rgba(106, 156, 255, 0.24);
+        }
+
+        .primary-button:hover,
+        .ghost-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            color: var(--muted);
+            flex-wrap: wrap;
+        }
+
+        .ghost-link {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        @media (max-width: 980px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-panel,
+            .form-panel {
+                padding: 28px 18px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 24px 18px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="shell">
+        <section class="brand-panel">
+            <div>
+                <div class="eyebrow">Create your account</div>
+                <h1 class="brand-title">Join the platform built for project sharing and subject feedback.</h1>
+                <p class="brand-copy">
+                    Register once and use the same workspace to move between project browsing, dashboard updates,
+                    and review-ready collaboration.
+                </p>
+            </div>
 
-<div class="left">
-    <h1>Join the Platform</h1>
-    <p>Create, upload, and discover innovative academic projects.</p>
-</div>
+            <div class="feature-stack">
+                <div class="feature-card">
+                    <strong>Student and faculty profiles</strong>
+                    <p>Choose the right role during signup so the correct dashboard is shown after login.</p>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-tile">
+                        <span>USN-ready</span>
+                        <p>Student profiles can be completed later with branch and USN information.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span>Department-aware</span>
+                        <p>Faculty profiles can carry designation and department details.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span>Shared theme</span>
+                        <p>Everything stays visually consistent across the auth and dashboard pages.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<div class="right">
-    <div class="container">
-        <h2>Register</h2>
+        <section class="form-panel">
+            <div class="auth-card">
+                <h2>Register</h2>
+                <p>Use your academic email and select the role that matches your profile.</p>
 
-        <form action="/auth/register" method="post">
-            <input type="text" name="name" placeholder="Full Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            <input type="password" name="password" placeholder="Password" required>
+                <form action="/auth/register" method="post">
+                    <div class="field">
+                        <label for="name">Full name</label>
+                        <input id="name" type="text" name="name" placeholder="Your full name" required>
+                    </div>
 
-            <select name="role">
-                <option value="STUDENT">Student</option>
-                <option value="FACULTY">Faculty</option>
-            </select>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" placeholder="name@example.com" required>
+                    </div>
 
-            <button type="submit">Create Account</button>
-        </form>
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" name="password" placeholder="Create a secure password" required>
+                    </div>
 
-        <a href="/auth/login">Already have an account?</a>
+                    <div class="field">
+                        <label for="role">Role</label>
+                        <select id="role" name="role">
+                            <option value="STUDENT">Student</option>
+                            <option value="FACULTY">Faculty</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="primary-button">Create account</button>
+                </form>
+
+                <div class="footer-row">
+                    <span>Already have an account?</span>
+                    <a class="ghost-link" href="/auth/login">Login</a>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
-
 </body>
 </html>
