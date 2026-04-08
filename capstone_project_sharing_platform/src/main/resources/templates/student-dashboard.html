@@ -52,7 +52,7 @@
         .profile-section {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
@@ -117,7 +117,7 @@
         }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
         }
 
@@ -143,8 +143,8 @@
     <script>
         function toggleEdit() {
             var form = document.getElementById("editForm");
-            form.style.display = (form.style.display === "none" || form.style.display === "") 
-                ? "block" 
+            form.style.display = (form.style.display === "none" || form.style.display === "")
+                ? "block"
                 : "none";
         }
     </script>
@@ -152,62 +152,64 @@
 
 <body>
 
-<div class="header">
-    <h1>Project Platform</h1>
-    <a href="/auth/logout" style="color:white;">Logout</a>
-</div>
-
-<div class="dashboard-container">
-    <div class="glass-card">
-
-        <div class="profile-section">
-            <div class="info-group">
-                <h2 th:text="${student.name}">Student Name</h2>
-                <p th:text="${student.email}">email@example.com</p>
-
-                <!-- ✅ FIXED BADGE -->
-                <p class="role-badge" th:text="${student.role}">STUDENT</p>
-            </div>
-
-            <div class="details-group">
-                <p th:text="${student.usn ?: '[No USN]'}">USN123</p>
-                <p th:text="${student.branch ?: '[No Branch]'}">CSE</p>
-            </div>
-        </div>
-
-        <div class="action-buttons">
-            <a th:href="@{/student/view-projects(email=${student.email})}">
-    <button class="btn-primary">View Projects</button>
-</a>
-            <button class="btn-secondary" onclick="toggleEdit()">
-                Edit Profile
-            </button>
-            <a th:href="@{'/projects/create'(email=${student.email})}">
-    <button class="btn-primary">Add Project</button>
-</a>
-        </div>
-
-        <div id="editForm">
-            <h3>Update Profile</h3>
-            <form action="/student/update" method="post">
-                <input type="hidden" name="email" th:value="${student.email}">
-
-                <input type="text" name="usn" placeholder="Enter USN" 
-                       th:value="${student.usn}" required>
-
-                <input type="text" name="branch" placeholder="Enter Branch" 
-                       th:value="${student.branch}" required>
-
-                <button type="submit" class="btn-primary">Save</button>
-            </form>
-        </div>
-
-        <p th:if="${param.success}" class="success-msg">
-            Profile updated successfully!
-        </p>
-
+    <div class="header">
+        <h1>Project Platform</h1>
+        <a href="/auth/logout" style="color:white;">Logout</a>
     </div>
-</div>
+
+    <div class="dashboard-container">
+        <div class="glass-card">
+
+            <div class="profile-section">
+                <div class="info-group">
+                    <h2 th:text="${student.name}">Student Name</h2>
+                    <p th:text="${student.email}">email@example.com</p>
+
+                    <!-- ✅ FIXED BADGE -->
+                    <p class="role-badge" th:text="${student.role}">STUDENT</p>
+                </div>
+
+                <div class="details-group">
+                    <p th:text="${student.usn ?: '[No USN]'}">USN123</p>
+                    <p th:text="${student.branch ?: '[No Branch]'}">CSE</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a th:href="@{/student/view-projects(email=${student.email})}">
+                    <button class="btn-primary">View Projects</button>
+                </a>
+                <a th:href="@{'/projects/create'(email=${student.email})}">
+                    <button class="btn-primary">Add Project</button>
+                </a>
+                <a th:href="@{/student/feedback/submit(email=${student.email})}">
+                    <button class="btn-primary">Submit Feedback</button>
+                </a>
+                <button class="btn-secondary" onclick="toggleEdit()">
+                    Edit Profile
+                </button>
+            </div>
+
+            <div id="editForm">
+                <h3>Update Profile</h3>
+                <form action="/student/update" method="post">
+                    <input type="hidden" name="email" th:value="${student.email}">
+
+                    <input type="text" name="usn" placeholder="Enter USN" th:value="${student.usn}" required>
+
+                    <input type="text" name="branch" placeholder="Enter Branch" th:value="${student.branch}" required>
+
+                    <button type="submit" class="btn-primary">Save</button>
+                </form>
+            </div>
+
+            <p th:if="${param.success}" class="success-msg">
+                Profile updated successfully!
+            </p>
+
+        </div>
+    </div>
 
 </body>
+
 </html>

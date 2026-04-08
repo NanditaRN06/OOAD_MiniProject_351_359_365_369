@@ -11,7 +11,9 @@ import com.ooadproject.capstone_project_sharing_platform.dto.request.FacultyRequ
 import com.ooadproject.capstone_project_sharing_platform.dto.response.FacultyResponse;
 import com.ooadproject.capstone_project_sharing_platform.dto.request.CommentRequest;
 import com.ooadproject.capstone_project_sharing_platform.service.CommentService;
-/* 
+import com.ooadproject.capstone_project_sharing_platform.service.FeedbackService;
+
+/*
  * GRASP Principle: Controller
  * This class acts as the Controller in the GRASP (General Responsibility Assignment Software Patterns).
  * Responsibility: It is the first object beyond the UI layer that receives and coordinates system operations.
@@ -78,5 +80,21 @@ public class FacultyController {
         commentService.addComment(request);
 
         return "redirect:/faculty/view-projects?email=" + email;
+    }
+
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @GetMapping("/feedback")
+    public String viewFeedback(@RequestParam String email, 
+                               @RequestParam(required = false) Long subjectId, 
+                               Model model) {
+        if (subjectId != null) {
+            model.addAttribute("feedbacks", feedbackService.viewSubjectFeedback(subjectId));
+        } else {
+            model.addAttribute("feedbacks", feedbackService.viewAllSubjectFeedback());
+        }
+        model.addAttribute("email", email);
+        return "view-feedback";
     }
 }

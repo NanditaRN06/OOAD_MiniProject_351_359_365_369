@@ -190,9 +190,11 @@
 
             <div class="action-buttons">
                 <a th:href="@{/faculty/view-projects(email=${faculty.email})}">
-    <button class="btn-primary">View Projects</button>
-</a>
-                
+                    <button class="btn-primary">View Projects</button>
+                </a>
+                <a th:href="@{/faculty/feedback(email=${faculty.email})}">
+                    <button class="btn-primary">View Feedback</button>
+                </a>
                 <button class="btn-secondary" onclick="toggleEdit()">Edit Details</button>
             </div>
 

@@ -11,7 +11,10 @@ import com.ooadproject.capstone_project_sharing_platform.dto.response.StudentRes
 import com.ooadproject.capstone_project_sharing_platform.service.CommentService;
 import com.ooadproject.capstone_project_sharing_platform.service.ProjectService;
 import com.ooadproject.capstone_project_sharing_platform.service.StudentService;
-
+import com.ooadproject.capstone_project_sharing_platform.service.FeedbackService;
+import com.ooadproject.capstone_project_sharing_platform.service.SubjectService;
+import com.ooadproject.capstone_project_sharing_platform.dto.request.FeedbackRequest;
+import com.ooadproject.capstone_project_sharing_platform.entity.DifficultyLevel;
 @Controller
 @RequestMapping("/student")
 public class StudentController {
@@ -75,4 +78,36 @@ public class StudentController {
 
     return "redirect:/projects/" + projectId + "?email=" + email;
 }
+
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private SubjectService subjectService;
+
+    @GetMapping("/feedback/submit")
+    public String feedbackForm(@RequestParam String email, Model model) {
+        model.addAttribute("email", email);
+        model.addAttribute("subjects", subjectService.getAllSubjects());
+        return "submit-feedback";
+    }
+
+    @PostMapping("/feedback")
+    public String submitFeedback(@RequestParam String email,
+                                 @RequestParam Long subjectId,
+                                 @RequestParam int relevance,
+                                 @RequestParam String gradingPattern,
+                                 @RequestParam String resources,
+                                 @RequestParam DifficultyLevel difficulty) {
+        FeedbackRequest request = FeedbackRequest.builder()
+                .email(email)
+                .subjectId(subjectId)
+                .relevance(relevance)
+                .gradingPattern(gradingPattern)
+                .resources(resources)
+                .difficulty(difficulty)
+                .build();
+        feedbackService.submitFeedback(request);
+        return "redirect:/student/dashboard?email=" + email + "&success=true";
+    }
 }
