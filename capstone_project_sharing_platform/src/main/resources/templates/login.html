@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Login | Capstone Project Sharing Platform')}"></head>
+<body class="auth-body">
+    <div class="shell">
+        <section class="brand-panel">
+            <div>
+                <div class="eyebrow">Capstone Project Sharing Platform</div>
+                <h1 class="brand-title">One workspace for project sharing, feedback, and academic review.</h1>
+                <p class="brand-copy">
+                    Students publish ideas, faculty review submissions, and the same branch now carries a cleaner,
+                    role-aware interface for the next round of collaboration.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <strong>Role-based entry</strong>
+                    <p>Separate student and faculty journeys with the same visual language.</p>
+                </div>
+                <div class="feature-card">
+                    <strong>Fast feedback flow</strong>
+                    <p>Move from login to dashboards and project views without extra navigation noise.</p>
+                </div>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span>2</span>
+                    <p>Primary user roles already supported in the app UI.</p>
+                </div>
+                <div class="stat-card">
+                    <span>1</span>
+                    <p>Shared design system across login, register, and dashboards.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="auth-card">
+                <h2>Welcome back</h2>
+                <p>Sign in to continue to your dashboard and open the shared project workspace.</p>
+
+                <div class="tag-row">
+                    <span class="tag">Students</span>
+                    <span class="tag">Faculty</span>
+                    <span class="tag">Project Review</span>
+                </div>
+
+                <form action="/auth/login" method="post">
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="primary-button">Login</button>
+                </form>
+
+                <p th:if="${error}" class="error-banner" th:text="${error}">Invalid credentials</p>
+
+                <div class="footer-row">
+                    <span>New here? Create an account first.</span>
+                    <a class="ghost-link" href="/auth/register">Register</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

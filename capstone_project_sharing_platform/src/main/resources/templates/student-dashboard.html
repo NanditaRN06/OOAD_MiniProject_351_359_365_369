@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Student Dashboard | Capstone Project Sharing Platform')}"></head>
+<body class="dashboard-body">
+    <div class="page-shell">
+        <header th:replace="~{fragments/components :: topbar('Project Sharing Platform', @{/student/view-projects}, 'View Projects', @{/auth/logout}, 'Logout')}"></header>
+
+        <section class="hero-grid">
+            <div class="panel hero">
+                <div class="eyebrow">Student workspace</div>
+                <h1 th:text="${student.name}">Student Name</h1>
+                <p>
+                    Your dashboard keeps the profile details, project discovery, and future feedback steps in one
+                    place so the rest of the team can work from the same branch.
+                </p>
+
+                <div class="profile-meta">
+                    <span class="pill" th:text="${student.email}">email@example.com</span>
+                    <span class="pill" th:text="${student.role}">STUDENT</span>
+                    <span class="pill">Profile sync enabled</span>
+                </div>
+            </div>
+
+            <div class="panel stats">
+                <div class="stat">
+                    <strong>USN</strong>
+                    <p th:text="${student.usn != null ? student.usn : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Branch</strong>
+                    <p th:text="${student.branch != null ? student.branch : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Primary next step</strong>
+                    <p>Open the project board and review the shared submissions list.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel quick-card">
+                <h2>Quick actions</h2>
+                <p>Move to the next part of the workflow without leaving the dashboard.</p>
+
+                <div class="card-actions">
+                    <a class="button button-primary" th:href="@{/student/view-projects}">View projects</a>
+                    <button class="button button-secondary" type="button" onclick="toggleEdit()">Edit profile</button>
+                </div>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Project discovery</strong>
+                        <p>Use the shared project page to scan ideas, domains, and technologies.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Profile maintenance</strong>
+                        <p>Keep USN and branch details updated so the faculty side sees the correct record.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel form-card">
+                <h2>Update profile</h2>
+                <p>Keep your academic details current for the rest of the shared workflow.</p>
+
+                <div id="editForm">
+                    <form action="/student/update" method="post">
+                        <input type="hidden" name="email" th:value="${student.email}">
+
+                        <div class="field">
+                            <label for="usn">USN</label>
+                            <input id="usn" type="text" name="usn" placeholder="Enter USN" th:value="${student.usn}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="branch">Branch</label>
+                            <input id="branch" type="text" name="branch" placeholder="Enter branch" th:value="${student.branch}" required>
+                        </div>
+
+                        <div class="card-actions">
+                            <button type="submit" class="button button-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${param.success}" class="success-msg">Profile updated successfully!</div>
+            </article>
+
+            <aside class="panel side-card">
+                <h2>What is next</h2>
+                <p>The dashboard is now aligned with the current branch and the shared templates folder.</p>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Shared UI</strong>
+                        <p>Login, register, dashboards, and projects page now use the same visual direction.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Consistent flow</strong>
+                        <p>Students can move straight into projects without jumping between disconnected screens.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </div>
+    <th:block th:replace="~{fragments/components :: toggleEditScript}"></th:block>
+</body>
+</html>

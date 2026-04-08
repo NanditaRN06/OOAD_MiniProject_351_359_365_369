@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Projects | Capstone Project Sharing Platform')}"></head>
+<body class="projects-body">
+    <div class="page-shell">
+        <header th:replace="~{fragments/components :: topbar('Project Sharing Platform', @{/auth/login}, 'Login', @{/auth/register}, 'Register')}"></header>
+
+        <section class="hero">
+            <div class="panel hero-card">
+                <div class="eyebrow">Shared project board</div>
+                <h1>Browse the project ideas that the branch can review next.</h1>
+                <p>
+                    This shared page gives students and faculty a consistent view of project summaries, domains, and
+                    technologies while the rest of the implementation gets finished.
+                </p>
+
+                <div class="search-row">
+                    <input type="text" placeholder="Search by title, domain, or subject" aria-label="Search projects">
+                    <button type="button" class="button button-primary">Search</button>
+                </div>
+
+                <div class="chips">
+                    <span class="chip">All projects</span>
+                    <span class="chip">Web apps</span>
+                    <span class="chip">Mobile</span>
+                    <span class="chip">AI / ML</span>
+                    <span class="chip">Cloud</span>
+                </div>
+            </div>
+
+            <div class="panel stats-card">
+                <div class="stat">
+                    <strong>View mode</strong>
+                    <p>Static UI preview ready for the controller routes already pointing here.</p>
+                </div>
+                <div class="stat">
+                    <strong>Connected routes</strong>
+                    <p>Student and faculty dashboards both open this same projects page.</p>
+                </div>
+                <div class="stat">
+                    <strong>Consistency goal</strong>
+                    <p>Keep the visual language aligned while teammates add the remaining features.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-grid">
+            <article class="panel project-card">
+                <div class="card-top">
+                    <div>
+                        <div class="badge">In review</div>
+                        <h2>Campus Connect</h2>
+                    </div>
+                    <span class="badge">Web</span>
+                </div>
+                <p>A student collaboration portal with dashboards, submissions, and feedback threads.</p>
+                <div class="meta-row">
+                    <span>Subject: Software Engineering</span>
+                    <span>React</span>
+                    <span>Spring Boot</span>
+                </div>
+            </article>
+
+            <article class="panel project-card">
+                <div class="card-top">
+                    <div>
+                        <div class="badge">Draft</div>
+                        <h2>Smart Library Desk</h2>
+                    </div>
+                    <span class="badge">IoT</span>
+                </div>
+                <p>Room and resource management dashboard with sensors, alerts, and usage analytics.</p>
+                <div class="meta-row">
+                    <span>Subject: Embedded Systems</span>
+                    <span>ESP32</span>
+                    <span>MySQL</span>
+                </div>
+            </article>
+
+            <article class="panel project-card">
+                <div class="card-top">
+                    <div>
+                        <div class="badge">Reviewed</div>
+                        <h2>Placement Radar</h2>
+                    </div>
+                    <span class="badge">AI</span>
+                </div>
+                <p>A recommendation engine that highlights internship opportunities and preparation paths.</p>
+                <div class="meta-row">
+                    <span>Subject: Machine Learning</span>
+                    <span>Python</span>
+                    <span>Flask</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="sidebar-grid">
+            <article class="panel sidebar-card">
+                <h2>Workflow hints</h2>
+                <div class="mini-list">
+                    <div class="mini-item">
+                        <strong>For students</strong>
+                        <p>Use the board to see what kinds of projects are already tracked in the app.</p>
+                    </div>
+                    <div class="mini-item">
+                        <strong>For faculty</strong>
+                        <p>Use this layout as the base for future comment and evaluation components.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel sidebar-card">
+                <h2>Next integration step</h2>
+                <p>The UI is now ready for dynamic project data once the backend team adds the list service.</p>
+                <div class="chips">
+                    <a class="button button-primary" href="/auth/login">Return to login</a>
+                    <a class="button button-secondary" href="/auth/register">Create account</a>
+                </div>
+            </article>
+        </section>
+    </div>
+</body>
+</html>

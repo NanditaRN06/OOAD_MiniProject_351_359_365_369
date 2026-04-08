@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Register | Capstone Project Sharing Platform')}"></head>
+<body class="auth-body register-theme">
+    <div class="shell">
+        <section class="brand-panel">
+            <div>
+                <div class="eyebrow">Create your account</div>
+                <h1 class="brand-title">Join the platform built for project sharing and subject feedback.</h1>
+                <p class="brand-copy">
+                    Register once and use the same workspace to move between project browsing, dashboard updates,
+                    and review-ready collaboration.
+                </p>
+            </div>
+
+            <div class="feature-stack">
+                <div class="feature-card">
+                    <strong>Student and faculty profiles</strong>
+                    <p>Choose the right role during signup so the correct dashboard is shown after login.</p>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-tile">
+                        <span>USN-ready</span>
+                        <p>Student profiles can be completed later with branch and USN information.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span>Department-aware</span>
+                        <p>Faculty profiles can carry designation and department details.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span>Shared theme</span>
+                        <p>Everything stays visually consistent across the auth and dashboard pages.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="auth-card">
+                <h2>Register</h2>
+                <p>Use your academic email and select the role that matches your profile.</p>
+
+                <form action="/auth/register" method="post">
+                    <div class="field">
+                        <label for="name">Full name</label>
+                        <input id="name" type="text" name="name" placeholder="Your full name" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" name="password" placeholder="Create a secure password" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="role">Role</label>
+                        <select id="role" name="role">
+                            <option value="STUDENT">Student</option>
+                            <option value="FACULTY">Faculty</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="primary-button">Create account</button>
+                </form>
+
+                <div class="footer-row">
+                    <span>Already have an account?</span>
+                    <a class="ghost-link" href="/auth/login">Login</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

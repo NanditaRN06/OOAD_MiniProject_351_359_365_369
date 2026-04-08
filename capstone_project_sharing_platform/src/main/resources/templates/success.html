@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Success | Capstone Project Sharing Platform')}"></head>
+<body class="success-body">
+    <main class="card">
+        <div class="eyebrow">Session status</div>
+        <h1>Login successful</h1>
+        <p>
+            Your account is ready for the next step. Use the login page to enter the branch-specific dashboard or
+            continue into the shared projects view.
+        </p>
+
+        <div class="actions">
+            <a class="primary" href="/auth/login">Back to login</a>
+            <a class="secondary" href="/auth/register">Create another account</a>
+        </div>
+
+        <section class="note-grid">
+            <div class="note">
+                <strong>Students</strong>
+                <p>Update USN and branch details from the student dashboard after signing in.</p>
+            </div>
+            <div class="note">
+                <strong>Faculty</strong>
+                <p>Update designation and department details from the faculty dashboard.</p>
+            </div>
+            <div class="note">
+                <strong>Projects</strong>
+                <p>Open the shared project board from the dashboard view once the account is active.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

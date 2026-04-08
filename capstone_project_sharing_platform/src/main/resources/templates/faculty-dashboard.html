@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/components :: head('Faculty Dashboard | Capstone Project Sharing Platform')}"></head>
+<body class="dashboard-body">
+    <div class="page-shell">
+        <header th:replace="~{fragments/components :: topbar('Project Sharing Platform', @{/faculty/view-projects}, 'View Projects', @{/auth/logout}, 'Logout')}"></header>
+
+        <section class="hero-grid">
+            <div class="panel hero">
+                <div class="eyebrow">Faculty workspace</div>
+                <h1 th:text="${faculty.name}">Faculty Name</h1>
+                <p>
+                    Review project work, keep your profile up to date, and stay aligned with the shared template set
+                    that now powers the branch.
+                </p>
+
+                <div class="profile-meta">
+                    <span class="pill" th:text="${faculty.email}">john@university.edu</span>
+                    <span class="pill" th:text="${faculty.role}">FACULTY</span>
+                    <span class="pill">Review mode ready</span>
+                </div>
+            </div>
+
+            <div class="panel stats">
+                <div class="stat">
+                    <strong>Designation</strong>
+                    <p th:text="${faculty.designation != null ? faculty.designation : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Department</strong>
+                    <p th:text="${faculty.department != null ? faculty.department : 'Awaiting update'}">Awaiting update</p>
+                </div>
+                <div class="stat">
+                    <strong>Primary next step</strong>
+                    <p>Open the shared project list and review the active submissions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel quick-card">
+                <h2>Quick actions</h2>
+                <p>Stay in control of the review workflow from one place.</p>
+
+                <div class="card-actions">
+                    <a class="button button-primary" th:href="@{/faculty/view-projects}">View projects</a>
+                    <button class="button button-secondary" type="button" onclick="toggleEdit()">Edit details</button>
+                </div>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Project review</strong>
+                        <p>Use the shared projects page to inspect titles, domains, and technologies.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Feedback readiness</strong>
+                        <p>The interface is prepared for comment and evaluation features to be layered in next.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel form-card">
+                <h2>Update profile</h2>
+                <p>Keep your designation and department current for student-facing views.</p>
+
+                <div id="editForm">
+                    <form action="/faculty/update" method="post">
+                        <input type="hidden" name="email" th:value="${faculty.email}">
+
+                        <div class="field">
+                            <label for="designation">Designation</label>
+                            <input id="designation" type="text" name="designation" th:value="${faculty.designation}"
+                                placeholder="Professor, Lecturer, Associate Professor" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="department">Department</label>
+                            <input id="department" type="text" name="department" th:value="${faculty.department}"
+                                placeholder="Computer Science" required>
+                        </div>
+
+                        <div class="card-actions">
+                            <button type="submit" class="button button-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${param.success}" class="success-msg">Details updated successfully!</div>
+            </article>
+
+            <aside class="panel side-card">
+                <h2>Review workspace</h2>
+                <p>The faculty view now mirrors the student UI so your team can keep the same language across screens.</p>
+
+                <div class="micro-list">
+                    <div class="micro-item">
+                        <strong>Shared navigation</strong>
+                        <p>Project pages and logout are available directly from the header.</p>
+                    </div>
+                    <div class="micro-item">
+                        <strong>Consistent branch</strong>
+                        <p>This redesign stays on the existing branch so your teammates can pull it and continue the work.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </div>
+    <th:block th:replace="~{fragments/components :: toggleEditScript}"></th:block>
+</body>
+</html>
