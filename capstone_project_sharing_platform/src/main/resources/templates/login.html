@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    background: linear-gradient(120deg, #1e3c72, #5c76a2);
+}
+
+/* LEFT SIDE (branding) */
+.left {
+    flex: 1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+}
+
+.left h1 {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.left p {
+    font-size: 22px;
+    opacity: 0.8;
+}
+
+/* RIGHT SIDE (form) */
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* GLASS CARD */
+.container {
+    width: 350px;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    color: white;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* INPUTS */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #00c6ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0072ff;
+}
+
+/* LINK */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #ddd;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="left">
+    <h1>Project Sharing Platform</h1>
+    <p>Manage, share and explore academic projects seamlessly.</p>
+</div>
+
+<div class="right">
+    <div class="container">
+        <h2>Login</h2>
+
+        <form action="/auth/login" method="post">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <a href="/auth/register">Create an account</a>
+    </div>
+</div>
+
+</body>
+</html>
