@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .dashboard-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-card {
+            width: 800px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-group h2 {
+            font-size: 28px;
+        }
+
+        .info-group p {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        /* ✅ FIXED ROLE BADGE */
+        .role-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 14px;
+            background: #ff7e5f;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            width: fit-content;
+        }
+
+        .details-group {
+            text-align: right;
+        }
+
+        .details-group p {
+            margin: 5px 0;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #00c6ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0072ff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        #editForm {
+            display: none;
+            margin-top: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .success-msg {
+            color: #72ffd1;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        function toggleEdit() {
+            var form = document.getElementById("editForm");
+            form.style.display = (form.style.display === "none" || form.style.display === "")
+                ? "block"
+                : "none";
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Project Platform</h1>
+        <a href="/auth/logout" style="color:white;">Logout</a>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="glass-card">
+
+            <div class="profile-section">
+                <div class="info-group">
+                    <h2 th:text="${student.name}">Student Name</h2>
+                    <p th:text="${student.email}">email@example.com</p>
+
+                    <!-- ✅ FIXED BADGE -->
+                    <p class="role-badge" th:text="${student.role}">STUDENT</p>
+                </div>
+
+                <div class="details-group">
+                    <p th:text="${student.usn ?: '[No USN]'}">USN123</p>
+                    <p th:text="${student.branch ?: '[No Branch]'}">CSE</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a th:href="@{/student/view-projects(email=${student.email})}">
+                    <button class="btn-primary">View Projects</button>
+                </a>
+                <a th:href="@{'/projects/create'(email=${student.email})}">
+                    <button class="btn-primary">Add Project</button>
+                </a>
+                <a th:href="@{/student/feedback/submit(email=${student.email})}">
+                    <button class="btn-primary">Submit Feedback</button>
+                </a>
+                <button class="btn-secondary" onclick="toggleEdit()">
+                    Edit Profile
+                </button>
+            </div>
+
+            <div id="editForm">
+                <h3>Update Profile</h3>
+                <form action="/student/update" method="post">
+                    <input type="hidden" name="email" th:value="${student.email}">
+
+                    <input type="text" name="usn" placeholder="Enter USN" th:value="${student.usn}" required>
+
+                    <input type="text" name="branch" placeholder="Enter Branch" th:value="${student.branch}" required>
+
+                    <button type="submit" class="btn-primary">Save</button>
+                </form>
+            </div>
+
+            <p th:if="${param.success}" class="success-msg">
+                Profile updated successfully!
+            </p>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

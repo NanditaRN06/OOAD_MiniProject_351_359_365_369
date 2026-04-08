@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Project</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #00c6ff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0072ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Add New Project</h2>
+
+    <form action="/projects/create" method="post">
+        <input type="hidden" name="email" th:value="${email}">
+
+        <input type="text" name="title" placeholder="Project Title" required>
+
+        <textarea name="description" placeholder="Description" required></textarea>
+
+        <input type="text" name="domain" placeholder="Domain" required>
+
+        <input type="text" name="technologies" placeholder="Technologies" required>
+
+        <button type="submit">Create Project</button>
+    </form>
+</div>
+
+</body>
+</html>

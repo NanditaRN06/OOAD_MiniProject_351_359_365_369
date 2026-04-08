@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users") 
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id

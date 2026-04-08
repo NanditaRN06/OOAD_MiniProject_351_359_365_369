@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Feedback</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d35400, #e67e22);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #f3f4f6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .feedback-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .feedback-card h3 {
+            margin-top: 0;
+            color: #93c5fd;
+        }
+        .feedback-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .detail-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #d1d5db;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a th:href="@{/faculty/dashboard(email=${email})}" class="back-link">&larr; Back to Dashboard</a>
+        <h2>Student Feedbacks</h2>
+        
+        <div th:if="${#lists.isEmpty(feedbacks)}">
+            <p style="text-align: center;">No feedback available at this moment.</p>
+        </div>
+
+        <div th:each="feedback : ${feedbacks}" class="feedback-card">
+            <h3 th:text="${feedback.subjectName} + ' - ' + ${feedback.studentName}">Subject Options</h3>
+            <div class="feedback-details">
+                <div class="detail-item">
+                    <span class="detail-label">Relevance (1-10)</span>
+                    <span th:text="${feedback.relevance}">10</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Difficulty</span>
+                    <span th:text="${feedback.difficulty}">MEDIUM</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Grading Pattern</span>
+                    <span th:text="${feedback.gradingPattern}">Assignment</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date Submitted</span>
+                    <span th:text="${#temporals.format(feedback.dateSubmitted, 'dd-MM-yyyy HH:mm')}">Date</span>
+                </div>
+            </div>
+            <div class="detail-item" style="margin-top: 15px;">
+                <span class="detail-label">Resources Provided</span>
+                <span th:text="${feedback.resources}">Resources description</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

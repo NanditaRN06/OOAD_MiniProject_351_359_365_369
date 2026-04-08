@@ -115,7 +115,9 @@ a:hover {
 <div class="right">
     <div class="container">
         <h2>Login</h2>
-
+        <p th:if="${error}" style="color: red; text-align:center;">
+    <span th:text="${error}"></span>
+</p>
         <form action="/auth/login" method="post">
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
