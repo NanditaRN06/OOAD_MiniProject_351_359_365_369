@@ -176,12 +176,15 @@
         </div>
 
         <div class="action-buttons">
-            <button class="btn-primary" onclick="alert('Viewing projects...')">
-                View Projects
-            </button>
+            <a th:href="@{/student/view-projects(email=${student.email})}">
+    <button class="btn-primary">View Projects</button>
+</a>
             <button class="btn-secondary" onclick="toggleEdit()">
                 Edit Profile
             </button>
+            <a th:href="@{'/projects/create'(email=${student.email})}">
+    <button class="btn-primary">Add Project</button>
+</a>
         </div>
 
         <div id="editForm">

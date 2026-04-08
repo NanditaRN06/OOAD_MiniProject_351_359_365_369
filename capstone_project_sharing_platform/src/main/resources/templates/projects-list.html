@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Projects</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            color: white;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .project-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(15px);
+        }
+
+        button {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            background: #00c6ff;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0072ff;
+        }
+
+        input {
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>All Projects</h2>
+
+    <a th:href="@{'/projects/create'(email=${email})}">
+        <button>Add Project</button>
+    </a>
+</div>
+
+<div th:each="project : ${projects}" class="project-card">
+
+    <h3 th:text="${project.title}"></h3>
+    <p th:text="${project.description}"></p>
+    <p><b>Domain:</b> <span th:text="${project.domain}"></span></p>
+
+    <a th:href="@{'/projects/' + ${project.id} + '?email=' + ${email}}">
+        <button>View Details</button>
+    </a>
+
+    <form action="/student/comment" method="post">
+        <input type="hidden" name="projectId" th:value="${project.id}">
+        <input type="hidden" name="email" th:value="${email}">
+
+        <input type="text" name="content" placeholder="Write comment" required>
+        <button type="submit">Comment</button>
+    </form>
+
+</div>
+
+</body>
+</html>

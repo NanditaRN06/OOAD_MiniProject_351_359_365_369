@@ -9,18 +9,18 @@ public class ProjectRequest {
 	private String domain;
 
 	private String technologies;
-
-	private Long subjectId;
+	private String email;
+	
 
 	public ProjectRequest() {
 	}
 
-	public ProjectRequest(String title, String description, String domain, String technologies, Long subjectId) {
+	public ProjectRequest(String title, String description, String domain, String technologies) {
 		this.title = title;
 		this.description = description;
 		this.domain = domain;
 		this.technologies = technologies;
-		this.subjectId = subjectId;
+		
 	}
 
 	public String getTitle() {
@@ -54,12 +54,12 @@ public class ProjectRequest {
 	public void setTechnologies(String technologies) {
 		this.technologies = technologies;
 	}
-
-	public Long getSubjectId() {
-		return subjectId;
+	public String getEmail() {
+		return email;
 	}
+	public void setEmail(String email) {
+    this.email = email;
+}
 
-	public void setSubjectId(Long subjectId) {
-		this.subjectId = subjectId;
-	}
+	
 }

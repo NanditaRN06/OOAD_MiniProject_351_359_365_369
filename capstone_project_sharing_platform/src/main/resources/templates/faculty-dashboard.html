@@ -189,9 +189,10 @@
             </div>
 
             <div class="action-buttons">
-                <button class="btn-primary" onclick="alert('Viewing all projects...')">View Projects</button>
-                <button class="btn-primary" onclick="alert('Comment functionality logic would go here.')">Comment on
-                    Project</button>
+                <a th:href="@{/faculty/view-projects(email=${faculty.email})}">
+    <button class="btn-primary">View Projects</button>
+</a>
+                
                 <button class="btn-secondary" onclick="toggleEdit()">Edit Details</button>
             </div>
 

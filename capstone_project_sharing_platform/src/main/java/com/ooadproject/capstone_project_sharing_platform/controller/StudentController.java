@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.ooadproject.capstone_project_sharing_platform.dto.request.CommentRequest;
 import com.ooadproject.capstone_project_sharing_platform.dto.request.StudentRequest;
 import com.ooadproject.capstone_project_sharing_platform.dto.response.StudentResponse;
+import com.ooadproject.capstone_project_sharing_platform.service.CommentService;
+import com.ooadproject.capstone_project_sharing_platform.service.ProjectService;
 import com.ooadproject.capstone_project_sharing_platform.service.StudentService;
 
 @Controller
@@ -47,9 +50,29 @@ public class StudentController {
 
         return "redirect:/student/dashboard?email=" + email + "&success=true";
     }
-
+    @Autowired
+    private ProjectService projectService;
     @GetMapping("/view-projects")
-    public String viewProjects() {
+    public String viewProjects(@RequestParam String email, Model model) {
+        model.addAttribute("projects", projectService.getAllProjects());
+        model.addAttribute("email", email);
         return "projects-list";
     }
+
+    @Autowired
+    private CommentService commentService;
+    @PostMapping("/comment")
+    public String addComment(@RequestParam String email,
+                         @RequestParam Long projectId,
+                         @RequestParam String content) {
+
+    CommentRequest request = new CommentRequest();
+    request.setEmail(email);
+    request.setProjectId(projectId);
+    request.setContent(content);
+
+    commentService.addComment(request);
+
+    return "redirect:/projects/" + projectId + "?email=" + email;
+}
 }

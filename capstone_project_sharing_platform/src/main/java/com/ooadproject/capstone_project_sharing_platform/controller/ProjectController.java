@@ -2,51 +2,98 @@ package com.ooadproject.capstone_project_sharing_platform.controller;
 
 import com.ooadproject.capstone_project_sharing_platform.dto.request.ProjectRequest;
 import com.ooadproject.capstone_project_sharing_platform.dto.response.ProjectResponse;
+import com.ooadproject.capstone_project_sharing_platform.service.CommentService;
 import com.ooadproject.capstone_project_sharing_platform.service.ProjectService;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
 @RequestMapping("/projects")
 @RequiredArgsConstructor
 public class ProjectController {
 
-	private final ProjectService projectService;
+    private final ProjectService projectService;
+	private final CommentService commentService;
+    // ============================
+    // 🌐 UI METHODS (Thymeleaf)
+    // ============================
 
-	@PostMapping
-	public ResponseEntity<ProjectResponse> createProject(@RequestBody ProjectRequest request) {
-		return new ResponseEntity<>(projectService.createProject(request), HttpStatus.CREATED);
-	}
+    // ✅ Show form to create project
+    @GetMapping("/create")
+    public String showCreateForm(@RequestParam String email, Model model) {
+        model.addAttribute("project", new ProjectRequest());
+        model.addAttribute("email", email); // ✅ IMPORTANT
+        return "create-project";
+    }
 
-	@GetMapping
-	public ResponseEntity<List<ProjectResponse>> getAllProjects() {
-		return ResponseEntity.ok(projectService.getAllProjects());
-	}
+    // ✅ Handle form submission
+    @PostMapping("/create")
+    public String createProjectFromForm(@ModelAttribute ProjectRequest request) {
+        projectService.createProject(request);
 
+        // ✅ redirect WITH email
+        return "redirect:/projects/view?email=" + request.getEmail();
+    }
+
+    // ✅ View all projects (UI)
+    @GetMapping("/view")
+    public String viewProjects(@RequestParam String email, Model model) {
+        model.addAttribute("projects", projectService.getAllProjects());
+        model.addAttribute("email", email); // ✅ REQUIRED for comments
+        return "projects-list";
+    }
 	@GetMapping("/{id}")
-	public ResponseEntity<ProjectResponse> getProjectById(@PathVariable Long id) {
-		return ResponseEntity.ok(projectService.getProjectById(id));
-	}
+public String viewProjectDetails(@PathVariable Long id,
+                                @RequestParam String email,
+                                Model model) {
 
-	@PutMapping("/{id}")
-	public ResponseEntity<ProjectResponse> updateProject(@PathVariable Long id,
-														 @RequestBody ProjectRequest request) {
-		return ResponseEntity.ok(projectService.updateProject(id, request));
-	}
+    ProjectResponse project = projectService.getProjectById(id);
+    model.addAttribute("project", project);
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-		projectService.deleteProject(id);
-		return ResponseEntity.noContent().build();
-	}
+    model.addAttribute("comments", commentService.getCommentsByProject(id));
+    model.addAttribute("email", email);
+
+    return "project-details";
+}
+
+    // ============================
+    // 🔗 REST API METHODS (Optional)
+    // ============================
+
+    @PostMapping("/api")
+    @ResponseBody
+    public ProjectResponse createProject(@RequestBody ProjectRequest request) {
+        return projectService.createProject(request);
+    }
+
+    @GetMapping("/api")
+    @ResponseBody
+    public List<ProjectResponse> getAllProjects() {
+        return projectService.getAllProjects();
+    }
+
+    @GetMapping("/api/{id}")
+    @ResponseBody
+    public ProjectResponse getProjectById(@PathVariable Long id) {
+        return projectService.getProjectById(id);
+    }
+
+    @PutMapping("/api/{id}")
+    @ResponseBody
+    public ProjectResponse updateProject(@PathVariable Long id,
+                                         @RequestBody ProjectRequest request) {
+        return projectService.updateProject(id, request);
+    }
+
+    @DeleteMapping("/api/{id}")
+    @ResponseBody
+    public void deleteProject(@PathVariable Long id) {
+        projectService.deleteProject(id);
+    }
 }

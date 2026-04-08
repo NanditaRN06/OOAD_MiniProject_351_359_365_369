@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Project Details</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            margin-bottom: 20px;
+        }
+
+        h2, h3 {
+            margin-bottom: 10px;
+        }
+
+        .comment {
+            background: rgba(255,255,255,0.15);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background: #00c6ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0072ff;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h2 th:text="${project.title}"></h2>
+        <p th:text="${project.description}"></p>
+
+        <p><b>Domain:</b> <span th:text="${project.domain}"></span></p>
+        <p><b>Technologies:</b> <span th:text="${project.technologies}"></span></p>
+        <p><b>Status:</b> <span th:text="${project.status}"></span></p>
+    </div>
+
+    <div class="card">
+        <h3>Comments</h3>
+
+        <div th:each="comment : ${comments}" class="comment">
+            <b th:text="${comment.userName}"></b> :
+            <span th:text="${comment.content}"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Add Comment</h3>
+
+        <form action="/student/comment" method="post">
+            <input type="hidden" name="projectId" th:value="${project.id}">
+            <input type="hidden" name="email" th:value="${email}">
+
+            <input type="text" name="content" placeholder="Write comment" required>
+            <button type="submit">Post</button>
+        </form>
+    </div>
+
+    <a th:href="@{'/student/view-projects'(email=${email})}">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

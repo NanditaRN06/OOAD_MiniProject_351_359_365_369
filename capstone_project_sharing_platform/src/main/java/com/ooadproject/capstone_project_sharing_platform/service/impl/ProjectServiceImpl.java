@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ooadproject.capstone_project_sharing_platform.entity.Project;
 import com.ooadproject.capstone_project_sharing_platform.entity.ProjectStatus;
-import com.ooadproject.capstone_project_sharing_platform.entity.Subject;
+import com.ooadproject.capstone_project_sharing_platform.entity.Student;
 import com.ooadproject.capstone_project_sharing_platform.repository.ProjectRepository;
-import com.ooadproject.capstone_project_sharing_platform.repository.SubjectRepository;
+import com.ooadproject.capstone_project_sharing_platform.repository.StudentRepository;
 import com.ooadproject.capstone_project_sharing_platform.service.ProjectService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,12 +20,14 @@ import lombok.RequiredArgsConstructor;
 public class ProjectServiceImpl implements ProjectService {
 
 	private final ProjectRepository projectRepository;
-	private final SubjectRepository subjectRepository;
-
+	
+	private final StudentRepository studentRepository;
 	@Override
 	public ProjectResponse createProject(ProjectRequest request) {
-		Subject subject = subjectRepository.findById(request.getSubjectId())
-				.orElseThrow(() -> new RuntimeException("Subject not found with id: " + request.getSubjectId()));
+		Student student = studentRepository.findByEmail(request.getEmail())
+        .orElseThrow(() -> new RuntimeException("Student not found"));
+
+
 
 		Project project = new Project();
 		project.setTitle(request.getTitle());
@@ -33,8 +35,8 @@ public class ProjectServiceImpl implements ProjectService {
 		project.setDomain(request.getDomain());
 		project.setTechnologies(request.getTechnologies());
 		project.setStatus(ProjectStatus.PENDING);
-		project.setSubject(subject);
-
+	
+		project.setStudent(student);
 		Project savedProject = projectRepository.save(project);
 		return mapToResponse(savedProject);
 	}
@@ -56,14 +58,13 @@ public class ProjectServiceImpl implements ProjectService {
 		Project existingProject = projectRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Project not found with id: " + id));
 
-		Subject subject = subjectRepository.findById(request.getSubjectId())
-				.orElseThrow(() -> new RuntimeException("Subject not found with id: " + request.getSubjectId()));
+		
 
 		existingProject.setTitle(request.getTitle());
 		existingProject.setDescription(request.getDescription());
 		existingProject.setDomain(request.getDomain());
 		existingProject.setTechnologies(request.getTechnologies());
-		existingProject.setSubject(subject);
+	
 
 		Project updatedProject = projectRepository.save(existingProject);
 		return mapToResponse(updatedProject);
@@ -83,7 +84,6 @@ public class ProjectServiceImpl implements ProjectService {
 				project.getDescription(),
 				project.getDomain(),
 				project.getTechnologies(),
-				project.getStatus(),
-				project.getSubject() != null ? project.getSubject().getName() : null);
+				project.getStatus());
 	}
 }

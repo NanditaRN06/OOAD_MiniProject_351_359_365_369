@@ -39,15 +39,12 @@ public class Project {
 	@JoinColumn(name = "student_id")
 	private Student student;
 
-	@ManyToOne
-	@JoinColumn(name = "subject_id", nullable = false)
-	private Subject subject;
 
 	public Project() {
 	}
 
 	public Project(Long id, String title, String description, String domain, String technologies,
-			ProjectStatus status, Student student, Subject subject) {
+			ProjectStatus status, Student student) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -55,7 +52,7 @@ public class Project {
 		this.technologies = technologies;
 		this.status = status;
 		this.student = student;
-		this.subject = subject;
+		
 	}
 
 	public Long getId() {
@@ -114,11 +111,5 @@ public class Project {
 		this.student = student;
 	}
 
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
+	
 }

@@ -10,20 +10,20 @@ public class ProjectResponse {
 	private String domain;
 	private String technologies;
 	private ProjectStatus status;
-	private String subjectName;
+	
 
 	public ProjectResponse() {
 	}
 
 	public ProjectResponse(Long id, String title, String description, String domain,
-			String technologies, ProjectStatus status, String subjectName) {
+			String technologies, ProjectStatus status) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.domain = domain;
 		this.technologies = technologies;
 		this.status = status;
-		this.subjectName = subjectName;
+		
 	}
 
 	public Long getId() {
@@ -74,11 +74,5 @@ public class ProjectResponse {
 		this.status = status;
 	}
 
-	public String getSubjectName() {
-		return subjectName;
-	}
-
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
-	}
+	
 }
