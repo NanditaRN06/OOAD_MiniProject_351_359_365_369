@@ -1,5 +1,17 @@
 package com.ooadproject.capstone_project_sharing_platform.dto.request;
 
+/**
+ * ProjectRequest DTO
+ * 
+ * Data Transfer Object for project creation and update requests.
+ * 
+ * Behavioral Pattern: Command Pattern
+ * - Used as parameter for ProjectOperation commands
+ * - Encapsulates the data needed to execute project operations
+ * - Part of the command execution pipeline
+ * 
+ * @see com.ooadproject.capstone_project_sharing_platform.service.ProjectService.ProjectOperation
+ */
 public class ProjectRequest {
 
 	private String title;

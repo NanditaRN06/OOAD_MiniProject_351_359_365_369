@@ -1,11 +1,14 @@
 package com.ooadproject.capstone_project_sharing_platform.service.impl;
 
-import com.ooadproject.capstone_project_sharing_platform.dto.request.ProjectRequest;
-import com.ooadproject.capstone_project_sharing_platform.dto.response.ProjectResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ooadproject.capstone_project_sharing_platform.dto.request.ProjectRequest;
+import com.ooadproject.capstone_project_sharing_platform.dto.response.ProjectResponse;
 import com.ooadproject.capstone_project_sharing_platform.entity.Project;
 import com.ooadproject.capstone_project_sharing_platform.entity.ProjectStatus;
 import com.ooadproject.capstone_project_sharing_platform.entity.Student;
@@ -14,7 +17,17 @@ import com.ooadproject.capstone_project_sharing_platform.repository.StudentRepos
 import com.ooadproject.capstone_project_sharing_platform.service.ProjectService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * ProjectServiceImpl with Command Pattern (Behavioral)
+ * 
+ * Implementation of Command Pattern for project operations:
+ * - Each operation (Create, Update, Delete) is encapsulated as a command
+ * - Operations are tracked in a history for audit trail
+ * - Supports operation logging and monitoring
+ */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -22,6 +35,10 @@ public class ProjectServiceImpl implements ProjectService {
 	private final ProjectRepository projectRepository;
 	
 	private final StudentRepository studentRepository;
+	
+	/* ===== COMMAND PATTERN: Operation History Tracking ===== */
+	private final List<String> operationHistory = new ArrayList<>();
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	@Override
 	public ProjectResponse createProject(ProjectRequest request) {
 		Student student = studentRepository.findByEmail(request.getEmail())
@@ -85,5 +102,42 @@ public class ProjectServiceImpl implements ProjectService {
 				project.getDomain(),
 				project.getTechnologies(),
 				project.getStatus());
+	}
+	
+	/* ===== COMMAND PATTERN: Operation Execution ===== */
+	
+	@Override
+	public ProjectResponse executeOperation(ProjectOperation operation) {
+		log.info("Executing operation: {}", operation.getDescription());
+		try {
+			ProjectResponse result = operation.execute();
+			recordOperation(operation.getDescription(), "SUCCESS");
+			return result;
+		} catch (Exception e) {
+			log.error("Error executing operation: {}", operation.getDescription(), e);
+			recordOperation(operation.getDescription(), "FAILED - " + e.getMessage());
+			throw e;
+		}
+	}
+	
+	@Override
+	public List<String> getOperationHistory() {
+		return new ArrayList<>(operationHistory);
+	}
+	
+	@Override
+	public void clearOperationHistory() {
+		log.info("Clearing operation history");
+		operationHistory.clear();
+	}
+	
+	/**
+	 * Record operation in history for audit trail
+	 */
+	private void recordOperation(String operationName, String status) {
+		String timestamp = LocalDateTime.now().format(dateFormatter);
+		String record = String.format("[%s] %s - %s", timestamp, operationName, status);
+		operationHistory.add(record);
+		log.info("Operation recorded: {}", record);
 	}
 }

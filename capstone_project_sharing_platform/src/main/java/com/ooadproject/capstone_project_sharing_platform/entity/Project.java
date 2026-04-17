@@ -11,6 +11,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Project Entity
+ * 
+ * This entity represents a capstone project in the system.
+ * 
+ * Behavioral Pattern Integration: Command Pattern
+ * - Project operations (Create, Update, Delete) are handled as commands through ProjectService
+ * - Each operation is encapsulated and can be tracked for audit trail
+ * - Operations can be queued, logged, and monitored through the command interface
+ * 
+ * @see com.ooadproject.capstone_project_sharing_platform.service.ProjectService.ProjectOperation
+ * @see com.ooadproject.capstone_project_sharing_platform.service.impl.ProjectServiceImpl
+ */
 @Entity
 @Table(name = "projects")
 public class Project {

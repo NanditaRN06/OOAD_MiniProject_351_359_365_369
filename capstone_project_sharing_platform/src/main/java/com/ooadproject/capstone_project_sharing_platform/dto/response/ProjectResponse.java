@@ -2,6 +2,18 @@ package com.ooadproject.capstone_project_sharing_platform.dto.response;
 
 import com.ooadproject.capstone_project_sharing_platform.entity.ProjectStatus;
 
+/**
+ * ProjectResponse DTO
+ * 
+ * Data Transfer Object for project response.
+ * 
+ * Behavioral Pattern: Command Pattern
+ * - Returned as result from ProjectOperation command execution
+ * - Encapsulates the result of project operations
+ * - Part of the command execution pipeline
+ * 
+ * @see com.ooadproject.capstone_project_sharing_platform.service.ProjectService.ProjectOperation
+ */
 public class ProjectResponse {
 
 	private Long id;
