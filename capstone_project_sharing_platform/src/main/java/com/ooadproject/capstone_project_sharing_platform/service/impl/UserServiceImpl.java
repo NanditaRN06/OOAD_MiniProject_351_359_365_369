@@ -14,20 +14,26 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-@Override
-public User registerUser(RegisterRequest request) {
 
-    User user = UserFactory.createUser(request);
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    return userRepository.save(user);
-}
+    @Override
+    public User registerUser(RegisterRequest request) {
+
+        User user = UserFactory.createUser(request);
+        // Encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
+    }
 
     @Override
     public User loginUser(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!user.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 

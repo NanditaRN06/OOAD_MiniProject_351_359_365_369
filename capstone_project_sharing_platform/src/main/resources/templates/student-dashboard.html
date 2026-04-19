@@ -210,6 +210,14 @@
         </div>
     </div>
 
+    <script th:inline="javascript">
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('projectAdded') === 'true') {
+            alert('Project added successfully!');
+            // Clean up the URL to prevent alert on refresh
+            window.history.replaceState(null, null, window.location.pathname + '?email=' + urlParams.get('email'));
+        }
+    </script>
 </body>
 
 </html>

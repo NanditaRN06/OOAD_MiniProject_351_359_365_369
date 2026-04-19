@@ -64,8 +64,8 @@ public class ProjectController {
     public String createProjectFromForm(@ModelAttribute ProjectRequest request) {
         projectService.createProject(request);
 
-        // ✅ redirect WITH email
-        return "redirect:/projects/view?email=" + request.getEmail();
+        // ✅ redirect back to dashboard
+        return "redirect:/student/dashboard?email=" + request.getEmail() + "&projectAdded=true";
     }
 
     // ✅ View all projects (UI)

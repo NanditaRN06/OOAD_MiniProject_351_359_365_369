@@ -75,4 +75,17 @@ public class AuthController {
     public String logout() {
         return "redirect:/auth/login";
     }
+
+    @Autowired
+    private com.ooadproject.capstone_project_sharing_platform.repository.UserRepository userRepository;
+
+    @GetMapping("/dashboard")
+    public String dashboard(@RequestParam String email) {
+        return userRepository.findByEmail(email).map(user -> {
+            if (user.getRole() == UserRole.FACULTY) {
+                return "redirect:/faculty/dashboard?email=" + email;
+            }
+            return "redirect:/student/dashboard?email=" + email;
+        }).orElse("redirect:/auth/login");
+    }
 }

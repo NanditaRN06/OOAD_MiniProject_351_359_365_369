@@ -43,6 +43,22 @@
 
 <body>
 
+<div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+    <h2>Search Projects</h2>
+    <form action="/search" method="get" style="display: flex; gap: 10px; margin-top: 10px;">
+        <input type="hidden" name="email" th:value="${email}">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by title, domain, tech..." style="width: 70%;">
+        <button type="submit">Search</button>
+        <a th:href="@{'/search?email=' + ${email}}">
+            <button type="button" style="background: #ff7e5f;">Clear</button>
+        </a>
+    </form>
+</div>
+
+<a th:href="@{'/auth/dashboard?email=' + ${email}}" style="text-decoration: none; display: inline-block; margin-bottom: 20px;">
+    <button type="button" style="padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">&larr; Go to Dashboard</button>
+</a>
+
 <div th:each="project : ${projects}" class="project-card">
 
     <h3 th:text="${project.title}"></h3>

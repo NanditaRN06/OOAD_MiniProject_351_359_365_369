@@ -113,6 +113,10 @@
             <button type="submit">Post</button>
         </form>
     </div>
+    
+    <a th:href="@{'/auth/dashboard?email=' + ${email}}" style="text-decoration: none;">
+        <button type="button" style="width: 100%; background: rgba(255,255,255,0.2); margin-top: 10px;">Go to Dashboard</button>
+    </a>
 
 </div>
 

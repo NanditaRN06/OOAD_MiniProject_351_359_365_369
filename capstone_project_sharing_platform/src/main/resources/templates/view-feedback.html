@@ -63,7 +63,9 @@
 </head>
 <body>
     <div class="container">
-        <a th:href="@{/faculty/dashboard(email=${email})}" class="back-link">&larr; Back to Dashboard</a>
+        <a th:href="@{'/auth/dashboard?email=' + ${email}}" style="text-decoration: none;">
+            <button type="button" style="padding: 10px; background: rgba(255,255,255,0.2); border: none; border-radius: 8px; color: white; cursor: pointer; margin-bottom: 20px; font-weight: bold;">&larr; Go to Dashboard</button>
+        </a>
         <h2>Student Feedbacks</h2>
         
         <div th:if="${#lists.isEmpty(feedbacks)}">
