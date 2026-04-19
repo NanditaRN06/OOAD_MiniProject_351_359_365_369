@@ -6,5 +6,6 @@ import com.ooadproject.capstone_project_sharing_platform.dto.response.CommentRes
 import java.util.List;
 public interface CommentService {
     CommentResponse addComment(CommentRequest request);
+    void deleteComment(Long commentId, String email);
     List<CommentResponse> getCommentsByProject(Long projectId);
 }

@@ -24,10 +24,6 @@
             margin-bottom: 20px;
         }
 
-        h2, h3 {
-            margin-bottom: 10px;
-        }
-
         .comment {
             background: rgba(255,255,255,0.15);
             padding: 10px;
@@ -35,29 +31,26 @@
             margin-top: 10px;
         }
 
-        input {
-            width: 80%;
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        select, input {
+            width: 100%;
             padding: 10px;
             border-radius: 8px;
             border: none;
         }
 
         button {
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 8px;
             border: none;
             background: #00c6ff;
             color: white;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #0072ff;
-        }
-
-        a {
-            color: #fff;
-            text-decoration: none;
         }
     </style>
 </head>
@@ -69,36 +62,86 @@
     <div class="card">
         <h2 th:text="${project.title}"></h2>
         <p th:text="${project.description}"></p>
-
         <p><b>Domain:</b> <span th:text="${project.domain}"></span></p>
-        <p><b>Technologies:</b> <span th:text="${project.technologies}"></span></p>
-        <p><b>Status:</b> <span th:text="${project.status}"></span></p>
+
+    <p><b>Technologies:</b> <span th:text="${project.technologies}"></span></p>
+
+    <p><b>Status:</b> <span th:text="${project.status}"></span></p>
     </div>
 
     <div class="card">
         <h3>Comments</h3>
+        
+        <div th:each="comment : ${comments}" class="comment"
+     style="display:flex; justify-content:space-between; align-items:center;">
 
-        <div th:each="comment : ${comments}" class="comment">
-            <b th:text="${comment.userName}"></b> :
-            <span th:text="${comment.content}"></span>
-        </div>
+    <div>
+        <b th:text="${comment.userName}"></b> :
+        <span th:text="${comment.content}"></span>
+    </div>
+
+    <form  th:if="${comment.email != null and comment.email.equals(email)}" action="/comments/delete" method="post">
+        <input type="hidden" name="commentId" th:value="${comment.id}">
+        <input type="hidden" name="projectId" th:value="${project.id}">
+        <input type="hidden" name="email" th:value="${email}">
+
+        <button type="submit" style="background:#ff4d4d;">Delete</button>
+    </form>
+
+</div>
     </div>
 
     <div class="card">
         <h3>Add Comment</h3>
 
-        <form action="/student/comment" method="post">
+        <!-- ✅ FIXED ENDPOINT -->
+        <form action="/comments" method="post" class="comment-form">
+
             <input type="hidden" name="projectId" th:value="${project.id}">
             <input type="hidden" name="email" th:value="${email}">
 
-            <input type="text" name="content" placeholder="Write comment" required>
+            <select name="type" id="commentType">
+                <option value="TEXT">Text Comment</option>
+                <option value="RATING">Rating Project</option>
+            </select>
+
+            <input type="text" name="content" id="contentField" placeholder="Write comment">
+
+            <input type="number" id="ratingField" name="rating"
+                   min="1" max="5" placeholder="Rating (1-5)">
+
             <button type="submit">Post</button>
         </form>
     </div>
 
-    <a th:href="@{'/student/view-projects'(email=${email})}">⬅ Back</a>
-
 </div>
+
+<script>
+    const typeSelect = document.getElementById("commentType");
+    const ratingField = document.getElementById("ratingField");
+    const contentField = document.getElementById("contentField");
+
+    function updateFields() {
+        if (typeSelect.value === "RATING") {
+            ratingField.style.display = "block";
+            ratingField.disabled = false;
+
+            contentField.disabled = true;
+            contentField.style.display = "none";
+        } else {
+            ratingField.style.display = "none";
+            ratingField.disabled = true;
+
+            contentField.disabled = false;
+            contentField.style.display = "block";
+        }
+    }
+
+    typeSelect.addEventListener("change", updateFields);
+
+    // initial state
+    updateFields();
+</script>
 
 </body>
 </html>

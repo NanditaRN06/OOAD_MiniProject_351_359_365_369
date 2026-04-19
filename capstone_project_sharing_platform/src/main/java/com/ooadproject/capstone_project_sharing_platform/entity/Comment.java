@@ -1,6 +1,8 @@
 package com.ooadproject.capstone_project_sharing_platform.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
+
 @Entity
 @Table(name = "comments")
 @Data
@@ -14,12 +16,15 @@ public class Comment {
 
     private String content;
 
-    // Who commented
+    private Integer rating; // NEW
+
+    @Enumerated(EnumType.STRING)
+    private CommentType type; // NEW
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    // On which project
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

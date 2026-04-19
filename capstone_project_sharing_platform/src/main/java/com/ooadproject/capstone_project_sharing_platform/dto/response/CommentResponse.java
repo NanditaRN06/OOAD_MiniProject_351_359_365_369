@@ -9,4 +9,5 @@ public class CommentResponse {
     private String content;
     private String userName;
     private Long projectId;
+    private String email;
 }
